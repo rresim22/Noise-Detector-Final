@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Audio Analysis Result</title>
+
+<style>
+:root{
+    --bg:#020617;
+    --accent:#38bdf8;
+    --text:#e5e7eb;
+    --muted:#9ca3af;
+    --safe:#22c55e;
+    --moderate:#facc15;
+    --harmful:#f97373;
+}
+
+*{box-sizing:border-box;}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:system-ui;
+    background:radial-gradient(circle at top,#1f2937,#020617);
+    color:var(--text);
+    display:flex;
+    justify-content:center;
+    padding:24px;
+}
+
+.shell{width:100%;max-width:1100px;}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:18px;
+}
+
+.title{font-size:1.6rem;margin:0;}
+.subtitle{color:var(--muted);font-size:0.9rem;}
+
+.layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:16px;
+}
+
+.panel{
+    background:var(--bg);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:14px;
+    padding:16px;
+}
+
+.panel-title{
+    font-size:0.75rem;
+    color:var(--muted);
+    text-transform:uppercase;
+    margin-bottom:10px;
+}
+
+.safe{color:var(--safe);}
+.moderate{color:var(--moderate);}
+.harmful{color:var(--harmful);}
+
+.section{margin-top:14px;}
+
+.bar{
+    width:100%;
+    height:10px;
+    background:rgba(255,255,255,0.08);
+    border-radius:999px;
+    overflow:hidden;
+}
+
+.fill{
+    height:100%;
+    transition:width 0.8s ease;
+}
+
+.fill-safe{background:var(--safe);}
+.fill-moderate{background:var(--moderate);}
+.fill-harmful{background:var(--harmful);}
+
+.tag{
+    display:inline-block;
+    margin-top:6px;
+    padding:4px 10px;
+    border-radius:999px;
+    background:rgba(56,189,248,0.12);
+    color:var(--accent);
+    font-size:0.75rem;
+}
+
+ul{
+    margin:6px 0 0;
+    padding-left:18px;
+    font-size:0.85rem;
+    color:var(--muted);
+}
+
+pre{
+    background:rgba(255,255,255,0.05);
+    padding:10px;
+    border-radius:10px;
+    font-size:0.75rem;
+    color:var(--muted);
+    overflow-x:auto;
+}
+
+img{
+    width:100%;
+    border-radius:12px;
+}
+
+.db{
+    margin-top:6px;
+    color:var(--accent);
+}
+
+/* prediction */
+.pred{
+    margin-top:8px;
+}
+
+.pred-item{
+    font-size:0.85rem;
+    color:var(--muted);
+    display:flex;
+    justify-content:space-between;
+}
+
+.pred-bar{
+    height:6px;
+    background:rgba(255,255,255,0.08);
+    border-radius:999px;
+    overflow:hidden;
+    margin-top:4px;
+}
+
+.pred-fill{
+    height:100%;
+    background:linear-gradient(90deg,#38bdf8,#22c55e);
+}
+</style>
+</head>
+
+<body>
+
+<div class="shell">
+
+<div class="header">
+    <div>
+        <h1 class="title">Audio Analysis Result</h1>
+        <p class="subtitle">Signal processing + ML environmental noise analysis</p>
+    </div>
+
+    <a href="{{ url_for('index') }}" style="color:var(--accent);text-decoration:none;">
+        ⟵ Analyze another
+    </a>
+</div>
+
+<div class="layout">
+
+<!-- LEFT -->
+<div class="panel">
+
+    <div class="panel-title">Summary</div>
+
+    {% set sev = (severity or "Safe")|lower %}
+
+    <!-- SEVERITY -->
+    <div class="section">
+        <strong>Severity</strong><br>
+        <span class="{{ sev }}">{{ severity or "Safe" }}</span>
+
+        <div class="bar" style="margin-top:8px;">
+            <div class="fill fill-{{ sev }}" id="sevFill"></div>
+        </div>
+    </div>
+
+    <!-- DB -->
+    <div class="section">
+        <strong>Noise Level</strong>
+        <div class="db">{{ db_value or 0 }} dB</div>
+    </div>
+
+    <!-- SOURCE -->
+    <div class="section">
+        <strong>Detected Source</strong><br>
+        <span class="tag">{{ source or "unknown" }}</span>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="section">
+        <strong>Audio Features</strong>
+        <ul>
+            <li>RMS: {{ features.rms or 0 }}</li>
+            <li>ZCR: {{ features.zcr or 0 }}</li>
+            <li>Spectral Centroid: {{ features.spectral_centroid or 0 }}</li>
+        </ul>
+    </div>
+
+    <!-- STATS -->
+    {% if stats %}
+    <div class="section">
+        <strong>Noise Statistics</strong>
+        <ul>
+            <li>Avg dB: {{ stats.avg_db|round(2) }}</li>
+            <li>Max dB: {{ stats.max_db|round(2) }}</li>
+            <li>Min dB: {{ stats.min_db|round(2) }}</li>
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- REPORT -->
+    <div class="section">
+        <strong>Analysis Report</strong>
+        <pre>{{ report or "No report available" }}</pre>
+    </div>
+
+</div>
+
+<!-- RIGHT -->
+<div class="panel">
+
+    <!-- PREDICTIONS -->
+    <div class="section">
+        <strong>Top Predictions (≥40%)</strong>
+
+        {% if predictions and predictions|length > 0 %}
+            {% for p in predictions %}
+                <div class="pred">
+                    <div class="pred-item">
+                        <span>{{ p.label }}</span>
+                        <span>{{ p.score }}%</span>
+                    </div>
+                    <div class="pred-bar">
+                        <div class="pred-fill" style="width: {{ p.score }}%"></div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="color:var(--muted)">No confident predictions</p>
+        {% endif %}
+    </div>
+
+    <!-- WAV -->
+    <div class="section">
+        <strong>Waveform</strong>
+        {% if waveform_img %}
+            <img src="{{ waveform_img }}">
+        {% endif %}
+    </div>
+
+    <!-- SPEC -->
+    <div class="section">
+        <strong>Spectrogram</strong>
+        {% if spectrogram_img %}
+            <img src="{{ spectrogram_img }}">
+        {% endif %}
+    </div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+const sev = "{{ severity|default('safe')|lower }}";
+const fill = document.getElementById("sevFill");
+
+let v = 30;
+if (sev === "safe") v = 30;
+else if (sev === "moderate") v = 60;
+else v = 90;
+
+setTimeout(() => {
+    fill.style.width = v + "%";
+}, 250);
+</script>
+
+</body>
+</html>

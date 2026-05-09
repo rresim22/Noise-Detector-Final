@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Intelligent Environmental Noise Analysis</title>
+
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card-bg: #020617;
+            --accent: #38bdf8;
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --danger: #f97373;
+            --safe: #4ade80;
+        }
+
+        
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: system-ui, sans-serif;
+            background: radial-gradient(circle at top, #1e293b, #020617);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .shell {
+            width: 100%;
+            max-width: 960px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .title {
+            font-size: 1.9rem;
+            margin: 0 0 8px;
+        }
+
+        .subtitle {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .card {
+            background: radial-gradient(circle at top left, #0f172a, #020617);
+            border-radius: 18px;
+            padding: 24px;
+            border: 1px solid rgba(148, 163, 184, 0.28);
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 10px;
+        }
+
+        .file-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px dashed rgba(148, 163, 184, 0.7);
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-name {
+            font-size: 0.85rem;
+            color: var(--text-main);
+            margin-top: 6px;
+        }
+
+        .submit-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 12px 22px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            color: #0b1120;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* -------------------------
+           LOADING OVERLAY
+        ------------------------- */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.92);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+            z-index: 999;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(148, 163, 184, 0.2);
+            border-top: 5px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--text-main);
+            font-size: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- LOADING OVERLAY -->
+<div class="loading-overlay" id="loading">
+    <div class="spinner"></div>
+    <div class="loading-text">Analyzing audio... please wait</div>
+</div>
+
+<div class="shell">
+
+    <header class="header">
+        <h1 class="title">Intelligent Environmental Noise Analysis</h1>
+        <p class="subtitle">Upload audio to detect source and severity</p>
+    </header>
+
+    <main class="card">
+
+        <form class="form" method="post" enctype="multipart/form-data" id="uploadForm">
+
+            <label class="file-label">
+                <span>🎧 Choose Audio File</span>
+                <span>Browse</span>
+                <input class="file-input" type="file" name="audio_file" id="audioInput"
+                       accept=".wav,.mp3,.ogg" required>
+            </label>
+
+            <div class="file-name" id="fileName">No file selected</div>
+
+            <button class="submit-btn" type="submit" id="submitBtn">
+                Analyze Audio →
+            </button>
+
+        </form>
+
+    </main>
+</div>
+
+<script>
+    const fileInput = document.getElementById("audioInput");
+    const fileName = document.getElementById("fileName");
+    const form = document.getElementById("uploadForm");
+    const loading = document.getElementById("loading");
+    const btn = document.getElementById("submitBtn");
+
+    // Show filename
+    fileInput.addEventListener("change", function () {
+        if (this.files.length > 0) {
+            fileName.textContent = "Selected: " + this.files[0].name;
+        } else {
+            fileName.textContent = "No file selected";
+        }
+    });
+
+    // Show spinner on submit
+    form.addEventListener("submit", function () {
+        loading.style.display = "flex";
+        btn.disabled = true;
+        btn.textContent = "Processing...";
+    });
+</script>
+
+</body>
+</html>
