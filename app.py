@@ -25,6 +25,8 @@ os.makedirs(PLOT_FOLDER, exist_ok=True)
 # -----------------------------
 # DATABASE SETUP
 # -----------------------------
+app = Flask(__name__) and if __name__ == "__main__": app.run(debug=True)
+
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
