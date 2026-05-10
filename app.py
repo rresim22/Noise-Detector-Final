@@ -219,10 +219,13 @@ def index():
         features = extract_features(y, sr)
         db = compute_noise_level(y)
         severity = classify_noise(db)
+
+        db_series = compute_db_timeseries(y)
+
         stats = {
-            "avg_db": float(np.mean(compute_db_timeseries(y))),
-            "max_db": float(np.max(compute_db_timeseries(y))),
-            "min_db": float(np.min(compute_db_timeseries(y)))
+            "avg_db": float(np.mean(db_series)),
+            "max_db": float(np.max(db_series)),
+            "min_db": float(np.min(db_series))
         }
 
         preds = sound_classifier(path)
