@@ -212,6 +212,7 @@ def index():
         path = os.path.join(UPLOAD_FOLDER, f"{uid}.wav")
         file.save(path)
 
+
         y, sr = librosa.load(path, sr=44100, mono=True)
         y = preprocess_audio(y)
 
