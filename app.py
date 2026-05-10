@@ -26,7 +26,7 @@ os.makedirs(PLOT_FOLDER, exist_ok=True)
 # DATABASE SETUP
 # -----------------------------
 
-	Add @app.route("/") and return render_template("index.html")
+
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
