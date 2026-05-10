@@ -180,7 +180,7 @@ def save_to_db(uid, filename, db, severity, source, features, stats, report):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute("""
-        INSERT INTO analyses VALUES (?,?,?,?,?,?,?, ?,?)
+        INSERT INTO analyses VALUES (?,?,?,?,?,?,?,?,?)
     """, (
         uid, filename, db, severity, source,
         json.dumps(features),
@@ -190,6 +190,7 @@ def save_to_db(uid, filename, db, severity, source, features, stats, report):
     ))
     conn.commit()
     conn.close()
+
 
 
 # -----------------------------
