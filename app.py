@@ -304,3 +304,6 @@ def download(uid):
 
 if __name__ == "__main__":
     app.run(debug=True)
+    
+ext = filename.rsplit(".", 1)[1].lower()
+path = os.path.join(UPLOAD_FOLDER, f"{uid}.{ext}")
