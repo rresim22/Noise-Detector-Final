@@ -57,25 +57,30 @@
             border: 1px solid rgba(148, 163, 184, 0.28);
         }
 
-      
-    .form {
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 10px;
+        }
+
+    
+    .file-label {
         display: flex;
-        flex-direction: column;
-        gap: 14px;
-        margin-top: 10px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px;
+        border-radius: 999px;
+        border: 1px dashed rgba(148, 163, 184, 0.7);
+        color: var(--text-muted);
+        cursor: pointer;
+    }
+
+    .file-input {
+        display: none;
     }
 </style>
 
-        .file-label {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 14px;
-            border-radius: 999px;
-            border: 1px dashed rgba(148, 163, 184, 0.7);
-            color: var(--text-muted);
-            cursor: pointer;
-        }
 
         .file-input {
             display: none;
