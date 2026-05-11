@@ -233,7 +233,8 @@ def index():
         predictions = filter_predictions(preds)
 
         wav, spec = save_plots(y, sr, uid)
-        ts_path = plot_timeseries(compute_db_timeseries(y), uid)
+        ts_path = plot_timeseries(db_series, uid)
+
 
         report = {
             "db": db,
