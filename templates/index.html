@@ -102,9 +102,6 @@
             cursor: not-allowed;
         }
 
-        /* -------------------------
-           LOADING OVERLAY
-        ------------------------- */
         .loading-overlay {
             position: fixed;
             inset: 0;
@@ -139,7 +136,6 @@
 
 <body>
 
-<!-- LOADING OVERLAY -->
 <div class="loading-overlay" id="loading">
     <div class="spinner"></div>
     <div class="loading-text">Analyzing audio... please wait</div>
@@ -157,7 +153,7 @@
         <form class="form" method="post" enctype="multipart/form-data" id="uploadForm">
 
             <label class="file-label">
-                <span>🎧 Choose Audio File</span>
+                <span>Choose Audio File</span>
                 <span>Browse</span>
                 <input class="file-input" type="file" name="audio_file" id="audioInput"
                        accept=".wav,.mp3,.ogg" required>
@@ -181,7 +177,6 @@
     const loading = document.getElementById("loading");
     const btn = document.getElementById("submitBtn");
 
-    // Show filename
     fileInput.addEventListener("change", function () {
         if (this.files.length > 0) {
             fileName.textContent = "Selected: " + this.files[0].name;
@@ -190,10 +185,12 @@
         }
     });
 
-    // Show spinner on submit
-   
     form.addEventListener("submit", function () {
         loading.style.display = "flex";
         btn.disabled = true;
         btn.textContent = "Processing...";
     });
+</script>
+
+</body>
+</html>
