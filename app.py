@@ -279,6 +279,7 @@ def history():
     return render_template("history.html", rows=rows)
 
 
+
 # -----------------------------
 # DOWNLOAD REPORT
 # -----------------------------
