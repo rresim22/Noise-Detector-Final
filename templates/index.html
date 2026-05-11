@@ -64,23 +64,16 @@
             margin-top: 10px;
         }
 
-    
-    .file-label {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px 14px;
-        border-radius: 999px;
-        border: 1px dashed rgba(148, 163, 184, 0.7);
-        color: var(--text-muted);
-        cursor: pointer;
-    }
-
-    .file-input {
-        display: none;
-    }
-</style>
-
+        .file-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px dashed rgba(148, 163, 184, 0.7);
+            color: var(--text-muted);
+            cursor: pointer;
+        }
 
         .file-input {
             display: none;
@@ -198,12 +191,9 @@
     });
 
     // Show spinner on submit
+   
     form.addEventListener("submit", function () {
         loading.style.display = "flex";
         btn.disabled = true;
         btn.textContent = "Processing...";
     });
-</script>
-
-</body>
-</html>
